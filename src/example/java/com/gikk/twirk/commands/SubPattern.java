@@ -42,6 +42,7 @@ public class SubPattern extends CommandExampleBase {
         {
             System.out.println("Sub Recongized with PatternB ");
         }
+
         int ChValue = 0;
         int tiervalue =0;
         String TMessage = message.getTag();
@@ -57,15 +58,16 @@ public class SubPattern extends CommandExampleBase {
                 ChValue = 1;
             }
             else {
-                ChValue = Integer.parseInt(m.group(1));
+                ChValue = Integer.parseInt(m.group(1))/1000;
             }
             tiervalue = Integer.parseInt(m2.group(1));
-            ChValue /= 1000;
+           // ChValue /= 1000; // TODO: Remove if the divide up higher works better
         }
         if(tiervalue == 3)
         {
             tiervalue *= 5;
         }
+        System.out.println("Debug: Previous SubCount: " + SubCount + " - TwirkSubs: " + twirk.getSubcount()); // TODO: This is a debug line, remove after
         SubCount += ChValue;
         SubValue += (5 * tiervalue);
 
