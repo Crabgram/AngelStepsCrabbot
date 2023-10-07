@@ -60,7 +60,11 @@ public class SubPattern extends CommandExampleBase {
             else {
                 ChValue = Integer.parseInt(m.group(1))/1000;
             }
-            tiervalue = Integer.parseInt(m2.group(1));
+            try {
+                tiervalue = Integer.parseInt(m2.group(1));
+            } catch (Exception e) {
+                System.out.println("Error: Failed to parse tier for: " + e);
+            }
            // ChValue /= 1000; // TODO: Remove if the divide up higher works better
         }
         if(tiervalue == 3)
