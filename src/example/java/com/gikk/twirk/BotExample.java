@@ -5,6 +5,7 @@ import com.gikk.twirk.events.TwirkListener;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.Objects;
 import java.util.Scanner;
 
 /**Simple example of how Twirk can be used. <br><br>
@@ -34,7 +35,11 @@ public class BotExample {
 		
 		twirk.addIrcListener( getOnDisconnectListener(twirk) );
 		//twirk.addIrcListener( new PatternCommandExample(twirk) );
-		twirk.addIrcListener( new PrefixCommandExample(twirk) );
+		if ((System.getenv("commandSet").equals("crab"))) {
+			// TODO: put crabbo commands here
+		} else {
+			twirk.addIrcListener(new PrefixCommandExample(twirk));
+		}
 		twirk.addIrcListener(new PatternTest(twirk));
 		twirk.addIrcListener(new CheerPattern(twirk) );
 		twirk.addIrcListener(new SubPattern(twirk) );
