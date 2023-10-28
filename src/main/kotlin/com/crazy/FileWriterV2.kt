@@ -11,7 +11,7 @@ import java.util.regex.Pattern
 
 class FileWriterV2 { // This is just intended to play around, so don't mind the mess
 
-    private val now = LocalDateTime.now().toString().replace(":", "")
+    private var now = LocalDateTime.now().toString().replace(":", "")
     private lateinit var config: FileWriterConfigV2
 
     private var patterns = mutableListOf<String>()
@@ -33,11 +33,34 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
         buildPatterns()
     }
 
+    fun reloadConfigFile() {
+        val newConfig = getConfigFileOrDefaults(false)
+        now = getNow()
+
+        newConfig.fileDefinitions.forEach {fileDef ->
+            val oldDef = config.fileDefinitions.find { it.id == fileDef.id}
+            if (oldDef != null) {
+                fileDef.fullFileName = oldDef.fullFileName
+            } else {
+                if (fileDef.active) {
+                    val newFileName = createFile(fileDef.fileName, fileDef.fileExtension, fileDef.writeFileHeader)
+                    fileDef.fullFileName = newFileName
+                }
+            }
+        }
+
+        config = newConfig
+    }
+
     private fun setFileName(name: String, extension: String = "txt"): String {
         return "Dump_${name}_$now.$extension"
     }
 
-    private fun getConfigFileOrDefaults(): FileWriterConfigV2 {
+    private fun getNow(): String {
+        return LocalDateTime.now().toString().replace(":", "")
+    }
+
+    private fun getConfigFileOrDefaults(useDefaultsIfFailed: Boolean = true): FileWriterConfigV2 {
 
         return try {
             val fileContents = File("FileWriterConfigV2.json").readText().trim()
@@ -46,7 +69,11 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
             config
         } catch (e: Exception) {
             writeLog("** [ERROR]: Failed to read config for $e")
-            FileWriterConfigV2("Failed_", "", mutableListOf())
+            if (useDefaultsIfFailed) {
+                FileWriterConfigV2("Failed_", "", mutableListOf())
+            } else {
+                config
+            }
         }
     }
     

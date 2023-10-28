@@ -58,7 +58,7 @@ FileWriterV2.kt
 
 ### Open Methods
 
-* init()
+* initFiles()
   * Params
     * Config: FileWriterConfigV2
       * can take a FileWriterConfigV2 data class as override if you don't want to define a json file
@@ -75,6 +75,8 @@ FileWriterV2.kt
     * textToWrite: String
       * text to write to file as is, no translation from parser will be done
   * Description: Used if you want to write to a file outside of the listener. FileId must be harded coded and match a defined Id in the config. 
+* reloadConfig
+  * Description: Reloads the config json file
 
 ## Parser Map
 

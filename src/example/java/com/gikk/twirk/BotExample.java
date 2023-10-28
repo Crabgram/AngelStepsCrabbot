@@ -76,6 +76,7 @@ public class BotExample {
 				Pair<String,String> bitCountCommand = new Pair<>("!bitcount", "Dumps the bits to terminal");
 				Pair<String,String> setBitsCommand = new Pair<>("!setbits", "Set the value for bits - Takes Integer");
 				Pair<String,String> setSubsCommand = new Pair<>("!setsubs", "Set the value for subs - Takes Integers separated by comas - 0,0,0,0 - Subs,Tier1,Tier2,Tier3 - Bad formatting will set all or individual ones to 0");
+				Pair<String,String> reloadConfigCommand = new Pair<>("!reloadconfig", "Reloads the config JSON file into the FileWriter");
 
 				ArrayList<Pair<String,String>> commandList = new ArrayList<>();
 				commandList.add(listCommand);
@@ -119,6 +120,9 @@ public class BotExample {
 					commandList.forEach( it ->
 							System.out.println(it.getFirst() + " - " + it.getSecond())
 					);
+				} else if (line.equals(reloadConfigCommand.getFirst())) {
+					twirk.fileWriter.reloadConfigFile();
+					System.out.println("**** Config Reloaded");
 				} else {
 					System.out.println("**** Unknown Command ****");
 				}

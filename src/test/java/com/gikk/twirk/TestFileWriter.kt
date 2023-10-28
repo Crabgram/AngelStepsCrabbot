@@ -24,12 +24,13 @@ class TestFileWriter {
     private val patternDefinition3 = FilePatterns("", "~ALL~")
     private val patternDefinition4 = FilePatterns("PRIVMSG", "~USERNAME~ - ~USER_MESSAGE~")
     private val patternDefinition5 = FilePatterns("msg-param-sub-plan=", "~USERNAME~ - New Sub: ~SUBS~")
+    private val patternDefinition6 = FilePatterns(".tmi.twitch.tv PART #angel_steps", "~ALL~")
 
-    private val fileDefinitionDono = FileDefinition("dono", "Dono-Log", "txt", true, mutableListOf(patternDefinition1, patternDefinition5), true, true)
+    private val fileDefinitionDono = FileDefinition("dono", "Dono-Log", "txt", true, mutableListOf(patternDefinition1, patternDefinition5, patternDefinition6), true, true)
     private val fileDefinitionDonoCsv = FileDefinition("donoCsv", "Dono-Log", "csv", false, mutableListOf(patternDefinition1), false, false)
     private val fileDefinitionTest = FileDefinition("test", "test-Log", "txt", true, mutableListOf(patternDefinition2, patternDefinition3), false, false)
     private val fileDefinitionMessage = FileDefinition("Message", "message-Log", "txt", true, mutableListOf(patternDefinition4), false, false)
-    private val fileDefinitionFull = FileDefinition("full", "full-Log", "txt", true, mutableListOf(patternDefinition3), false, false)
+    private val fileDefinitionFull = FileDefinition("Full", "full-Log", "txt", true, mutableListOf(patternDefinition3), false, false)
 
     private val fileDefinitions = mutableListOf<FileDefinition>()
 
@@ -57,10 +58,28 @@ class TestFileWriter {
             fileWriter.listen(it)
         }
 
-
+        fileWriter.reloadConfigFile()
+        messages.forEach {
+            fileWriter.listen(it)
+        }
         deleteTestFiles(config) // Comment out to see files
 
     }
+
+//    @Test
+//    fun fileWritingFromConfig() {
+//
+//        val fileWriter = FileWriterV2()
+//        fileWriter.initFiles()
+//
+//        messages.forEach {
+//            fileWriter.listen(it)
+//        }
+//
+//
+//        deleteTestFiles(config) // Comment out to see files
+//
+//    }
 
     /*
             val message = "@badge-info=subscriber/11;badges=subscriber/9,no_video/1;color=#CC00BE;display-name=Necrothunder;emotes=emotesv2_fac9579a586f4b36a7c21e383be42e81:0-11/emotesv2_ab9b81ab9e604163b479752364d0bf84:13-24;flags=;" +
