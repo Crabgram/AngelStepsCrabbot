@@ -4,6 +4,8 @@ import com.crazy.models.FileWriterConfigV2
 import com.fasterxml.jackson.databind.ObjectMapper
 import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
+import java.nio.file.Files
+import java.nio.file.Paths
 import java.time.LocalDateTime
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -80,6 +82,7 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
     private fun createFile(fileName: String, fileExtension: String, addFileHeader: Boolean): String {
         val newFileName = setFileName(fileName, fileExtension)
         val newFileNameWithPath = getFileWithPath(newFileName, config.filesLocation)
+        createDirectoryIfNotExists(config.filesLocation)
         try {
             writeLog("Creating File $newFileName")
             if (!File(newFileNameWithPath).exists()) {
@@ -101,6 +104,14 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
     private fun getFileWithPath(fileName: String, path: String): String {
         val pathToUse = if (path.isNotEmpty()) "$path/" else ""
         return "$pathToUse$fileName"
+    }
+
+    private fun createDirectoryIfNotExists(path: String) {
+        if (!Files.exists(Paths.get(path))) {
+            println("** [INFO] creating directory $path..")
+            Files.createDirectory(Paths.get(path))
+            println("** [INFO] created directory $path")
+        }
     }
 
     private fun buildPatterns() {

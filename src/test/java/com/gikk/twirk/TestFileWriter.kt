@@ -35,7 +35,7 @@ class TestFileWriter {
     private val fileDefinitions = mutableListOf<FileDefinition>()
 
 
-    private val config = FileWriterConfigV2("Dump_", "", fileDefinitions, true)
+    private val config = FileWriterConfigV2("Dump_", "dump", fileDefinitions, true)
 
     private val messages = mutableListOf<String>()
 
@@ -92,7 +92,7 @@ class TestFileWriter {
 
     private fun deleteTestFiles(config: FileWriterConfigV2) {
         config.fileDefinitions.forEach {
-            File(it.fullFileName).delete()
+            File("${config.filesLocation}/${it.fullFileName}").delete()
         }
     }
     private fun setFileWriterConfig() {
