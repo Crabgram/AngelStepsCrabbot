@@ -6,6 +6,7 @@ import com.fasterxml.jackson.module.kotlin.registerKotlinModule
 import java.io.File
 import java.nio.file.Files
 import java.nio.file.Paths
+import java.time.LocalDate
 import java.time.LocalDateTime
 import java.util.regex.Matcher
 import java.util.regex.Pattern
@@ -14,14 +15,19 @@ import java.util.regex.Pattern
 class FileWriterV2 { // This is just intended to play around, so don't mind the mess
 
     private var now = LocalDateTime.now().toString().replace(":", "")
+    private var today = LocalDate.now().toString()
     private lateinit var config: FileWriterConfigV2
 
     private var patterns = mutableListOf<String>()
 
     private var parser = ParserV2()
 
+    private var createDateFolders = false
+
     fun initFiles(configOverride: FileWriterConfigV2? = null) {
         config = configOverride ?: getConfigFileOrDefaults()
+
+        checkAndSetCreateDateFolders()
 
         config.fileDefinitions.removeIf { !it.active }
 
@@ -51,7 +57,15 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
             }
         }
 
+        newConfig.fileDefinitions.removeIf { !it.active }
+
         config = newConfig
+    }
+
+    private fun checkAndSetCreateDateFolders() {
+        if (config.filesLocation.isNotBlank()) {
+            createDateFolders = true
+        }
     }
 
     private fun setFileName(name: String, extension: String = "txt"): String {
@@ -102,15 +116,20 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
     }
 
     private fun getFileWithPath(fileName: String, path: String): String {
-        val pathToUse = if (path.isNotEmpty()) "$path/" else ""
+        var pathToUse = if (path.isNotEmpty()) "$path/" else ""
+        pathToUse = if (createDateFolders) "$pathToUse$today/" else pathToUse
         return "$pathToUse$fileName"
     }
 
     private fun createDirectoryIfNotExists(path: String) {
         if (!Files.exists(Paths.get(path))) {
-            println("** [INFO] creating directory $path..")
+            val newPath = "$path/$today"
+            println("** [INFO] creating directory $newPath..")
             Files.createDirectory(Paths.get(path))
-            println("** [INFO] created directory $path")
+            if (!Files.exists(Paths.get(newPath))) {
+                Files.createDirectory(Paths.get(newPath))
+            }
+            println("** [INFO] created directory $newPath")
         }
     }
 

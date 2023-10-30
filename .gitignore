@@ -136,6 +136,8 @@ $RECYCLE.BIN/
 # IntelliJ Idea
 /twirc.iml
 
+FileWriterConfigV2.json
+
 dumpTest.txt
 dumpTest*
 Dump_*
