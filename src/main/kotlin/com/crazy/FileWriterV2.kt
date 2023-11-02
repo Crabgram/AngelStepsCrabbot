@@ -122,13 +122,10 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
     }
 
     private fun createDirectoryIfNotExists(path: String) {
-        if (!Files.exists(Paths.get(path))) {
-            val newPath = "$path/$today"
+        val newPath = if (createDateFolders) "$path/$today" else path
+        if (!Files.exists(Paths.get(newPath))) {
             println("** [INFO] creating directory $newPath..")
-            Files.createDirectory(Paths.get(path))
-            if (!Files.exists(Paths.get(newPath))) {
-                Files.createDirectory(Paths.get(newPath))
-            }
+            Files.createDirectories(Paths.get(newPath))
             println("** [INFO] created directory $newPath")
         }
     }
