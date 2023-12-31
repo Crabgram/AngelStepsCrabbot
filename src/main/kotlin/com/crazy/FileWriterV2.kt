@@ -18,14 +18,14 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
 
     private var parser = ParserV2()
 
-    fun initFiles(configOverride: FileWriterConfigV2? = null) {
+    fun initFiles(configOverride: FileWriterConfigV2? = null, testRun: Boolean = false) {
         config = configOverride ?: getConfigFileOrDefaults()
 
         config.fileDefinitions.removeIf { !it.active }
 
         config.fileDefinitions.forEach {
             if (it.active) {
-                val newFileName = createFile(it.fileName, it.fileExtension, it.writeFileHeader)
+                val newFileName = createFile(it.fileName, it.fileExtension, it.writeFileHeader, testRun)
                 it.fullFileName = newFileName
             }
         }
@@ -50,8 +50,10 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
         }
     }
     
-    private fun createFile(fileName: String, fileExtension: String, addFileHeader: Boolean): String {
-        val newFileName = setFileName(fileName, fileExtension)
+    private fun createFile(fileName: String, fileExtension: String, addFileHeader: Boolean, testRun: Boolean = false): String {
+        var newFileName = setFileName(fileName, fileExtension)
+        if (testRun)
+            newFileName = "TEST_$newFileName"
         val newFileNameWithPath = getFileWithPath(newFileName, config.filesLocation)
         try {
             writeLog("Creating File $newFileName")

@@ -129,7 +129,7 @@ public final class Twirk {
 		this.queue = new OutputQueue();
 
 		this.fileWriter = new FileWriterV2();
-		this.fileWriter.initFiles(null);
+		this.fileWriter.initFiles(null, false);
 
 		addIrcListener( new TwirkMaintainanceListener(this) );
 	}
