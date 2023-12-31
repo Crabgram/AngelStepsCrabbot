@@ -1,0 +1,22 @@
+{
+  "USERNAME": {
+    "text": "display-name",
+    "overrideMethod": null
+  },
+  "BITS": {
+    "text": "bits",
+    "overrideMethod": null
+  },
+  "SUBS": {
+    "text": "msg-param-sub-plan",
+    "overrideMethod": null
+  },
+  "USER_MESSAGE": {
+    "text": "user-type",
+    "overrideMethod": "getPrivateMessage"
+  },
+  "ALL": {
+    "text": "all-text",
+    "overrideMethod": null
+  }
+}

@@ -20,6 +20,7 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
 
     fun initFiles(configOverride: FileWriterConfigV2? = null, testRun: Boolean = false) {
         config = configOverride ?: getConfigFileOrDefaults()
+        parser.getParserMaps()
 
         config.fileDefinitions.removeIf { !it.active }
 
@@ -29,7 +30,6 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
                 it.fullFileName = newFileName
             }
         }
-
         buildPatterns()
     }
 
@@ -141,7 +141,7 @@ class FileWriterV2 { // This is just intended to play around, so don't mind the 
         var newMessage = findPattern
 
         for (str in matchList) {
-            val parserMap = parserMap[str] ?: throw Exception() // TODO Fix
+            val parserMap = parser.parserMapLocal[str] ?: throw Exception() // TODO Fix
             val map = parser.parseMessage(message)
             val stuff = parser.getValue(map, parserMap)
             newMessage = newMessage.replace("~$str~", stuff)

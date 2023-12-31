@@ -1,9 +1,15 @@
 package com.crazy
 
 import com.crazy.models.ParserOptions
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.module.kotlin.readValue
+import com.fasterxml.jackson.module.kotlin.registerKotlinModule
+import java.io.File
 import kotlin.reflect.KCallable
 
 class ParserV2 {
+
+    var parserMapLocal = mutableMapOf<String, ParserOptions>()
 
     companion object {
         val methods: Map<String, KCallable<*>> = ParserV2::class.members
@@ -51,6 +57,18 @@ class ParserV2 {
         }
 
         return privateMessage?.substringAfter("#angel_steps")?.trim()
+    }
+
+    fun getParserMaps() {
+        try {
+            val parserConfigFile = File("ParserConfigV2.json").readText().trim()
+            val config: MutableMap<String, ParserOptions> = ObjectMapper().registerKotlinModule().readValue(parserConfigFile)
+            println("** [INFO]: Successfully read the ParserConfigV2 file")
+            this.parserMapLocal = config
+        } catch (e: Exception) {
+            println("** [ERROR]: Failed to read config for $e")
+            this.parserMapLocal = parserMap
+        }
     }
 
 //    fun getStuff(message: String): Triple<String, String, String> {

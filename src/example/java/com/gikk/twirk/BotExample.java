@@ -72,17 +72,21 @@ public class BotExample {
 			else
 			{
 				Pair<String,String> listCommand = new Pair<>("!list", "Lists all Commands");
+				Pair<String,String> helpCommand = new Pair<>("!help", "Lists all Commands");
 				Pair<String,String> subCountCommand = new Pair<>("!subcount", "Dumps the subcount to terminal");
 				Pair<String,String> bitCountCommand = new Pair<>("!bitcount", "Dumps the bits to terminal");
 				Pair<String,String> setBitsCommand = new Pair<>("!setbits", "Set the value for bits - Takes Integer");
 				Pair<String,String> setSubsCommand = new Pair<>("!setsubs", "Set the value for subs - Takes Integers separated by comas - 0,0,0,0 - Subs,Tier1,Tier2,Tier3 - Bad formatting will set all or individual ones to 0");
+				Pair<String,String> reloadFileWriterCommand = new Pair<>("!reload", "reloads the file writer and parse configs");
 
 				ArrayList<Pair<String,String>> commandList = new ArrayList<>();
 				commandList.add(listCommand);
+				commandList.add(helpCommand);
 				commandList.add(subCountCommand);
 				commandList.add(bitCountCommand);
 				commandList.add(setBitsCommand);
 				commandList.add(setSubsCommand);
+				commandList.add(reloadFileWriterCommand);
 				//Any message typed in bot will be posted in twitch chat...
 //				twirk.channelMessage(line);
 				if(line.equals(subCountCommand.getFirst()) ) {
@@ -115,7 +119,9 @@ public class BotExample {
 					} catch (Exception e) {
 						System.out.println("**** Command Error - " + e);
 					}
-				} else if (line.equals(listCommand.getFirst())) {
+				} else if (line.equals(reloadFileWriterCommand.getFirst())) {
+					twirk.fileWriter.initFiles(null, false);
+				} else if (line.equals(listCommand.getFirst()) || line.equals(helpCommand.getFirst())) {
 					commandList.forEach( it ->
 							System.out.println(it.getFirst() + " - " + it.getSecond())
 					);
